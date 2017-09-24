@@ -17,7 +17,7 @@ public class Threadtwo extends Thread {      //征程不用内部类的话，线
     class TimeOut extends TimerTask {   //通过内部类的方式，实现了线程间通信
         public void run() {
             expired = true;//标记为超时 应该属于实例域 又涉及到内部类的问题
-            System.gc();
+            System.gc();         //gc应该会很影响效率吧
         }
     }
 
@@ -25,7 +25,7 @@ public class Threadtwo extends Thread {      //征程不用内部类的话，线
         String name = Thread.currentThread().getName();    //获取当下线程的ID
         Socket soc = new Socket();
         Timer timepired = new Timer();
-        timepired.schedule(new TimeOut(), 200);  //Timer是需要额外开一个线程来弄的
+        timepired.schedule(new TimeOut(), 100);  //Timer是需要额外开一个线程来弄的
         while (true) {
             int time = 0;
             try {
@@ -35,7 +35,9 @@ public class Threadtwo extends Thread {      //征程不用内部类的话，线
                     //this.stop();
                     break;
                 }
-                soc.connect(new InetSocketAddress("www.baidu.com", 80), 5000);
+                //Socket soc = new Socket();
+                soc.connect(new InetSocketAddress("www.baidu.com", 80), 3000);
+                soc.setSoTimeout(5000);
                 System.out.println("线程" + name + "connect第" + time + "次");
                 if(expired) {
                     Inform.failed++;
@@ -46,10 +48,9 @@ public class Threadtwo extends Thread {      //征程不用内部类的话，线
                 BufferedWriter write = new BufferedWriter(new OutputStreamWriter(soc.getOutputStream()));
                 BufferedReader read = new BufferedReader(new InputStreamReader(soc.getInputStream()));
                 write.write(Benchquest.req);
-                write.flush();
+                write.flush();             //刷新缓冲，将缓冲中的数据写到目的文件中。
                 String line = null;
                 byte[] temp = new byte[100];
-                //read.read(temp);
                 while((line = read.readLine()) != null) {
                     if(expired) {
                         System.out.println("线程" + name + "读取的while中断");
@@ -70,7 +71,6 @@ public class Threadtwo extends Thread {      //征程不用内部类的话，线
                 } catch (IOException e) {
                     System.out.println("果然麻烦");   //一会看一下带资源的的try
                 }
-
             }
         }
     }

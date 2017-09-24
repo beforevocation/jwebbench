@@ -5,6 +5,8 @@ import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+
+import bench_threads.Threadone;
 import bench_threads.Threadtwo;
 
 public class Benchpre {
@@ -26,9 +28,9 @@ public class Benchpre {
 
     public void new_threads(){           //开线程
 
-        Threadtwo[] childs = new Threadtwo[10];
+        Threadone[] childs = new Threadone[10];
         for(int i = 0; i < 2; i++) {
-            childs[i] = new Threadtwo();
+            childs[i] = new Threadone();
             childs[i].start();
         }
     }
