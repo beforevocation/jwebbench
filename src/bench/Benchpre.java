@@ -8,6 +8,7 @@ import java.net.SocketTimeoutException;
 
 import bench_threads.Threadone;
 import bench_threads.Threadtwo;
+import inform.Inform;
 
 public class Benchpre {
 
@@ -28,8 +29,8 @@ public class Benchpre {
 
     public void new_threads(){           //开线程
 
-        Threadone[] childs = new Threadone[10];
-        for(int i = 0; i < 2; i++) {
+        Threadone[] childs = new Threadone[Inform.clinetnum];
+        for(int i = 0; i < Inform.clinetnum; i++) {
             childs[i] = new Threadone();
             childs[i].start();
         }
